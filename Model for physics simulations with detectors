@@ -1,0 +1,37 @@
+detx,dety,detz = np.loadtxt('TESTE.txt', unpack=True)
+detect = np.loadtxt('TESTE.txt', float)
+
+#for k in range(1,11,1):
+fig=plt.figure(figsize=(15,15))
+ax1 = fig.add_subplot(111)
+datarawup = np.loadtxt("TESTE2.txt", float)
+
+
+y = detect[:,1]
+x = detect[:,2]
+dose = datarawup[:]
+
+X, Y, Z, = np.array([]), np.array([]), np.array([])
+for i in range(len(x)):
+        X = np.append(X, x[i])
+        Y = np.append(Y, y[i])
+        Z = np.append(Z, dose[i])
+xi = np.linspace(X.min(), X.max(), 1000)
+yi = np.linspace(Y.min(), Y.max(), 1000)
+zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='linear')
+
+    
+dx=ax1.contourf(xi, yi, zi,extend='both', cmap='hot', levels=14 )
+cs=ax1.contour(xi, yi, zi, colors='k', levels = 20)
+ax1.clabel(cs, fmt = '%.3f', colors = 'k')
+aa=np.arange(0,1,0.05)
+fig.colorbar(dx, ax=ax1, ticks=aa)
+plt.scatter(detz,dety,linewidths=6, color='b')
+plt.xlim(-31,31)
+plt.ylim(-101,81)
+ax1.xaxis.set_ticks(np.linspace(-30, 30, 5))
+ax1.yaxis.set_ticks(np.arange(-100, 80, 20))
+ax1.set_box_aspect(3)
+plt.axis('equal')
+plt.title("TESTE_")
+plt.savefig("TESTE_.jpg",bbox_inches='tight')
